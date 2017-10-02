@@ -12,8 +12,9 @@ Rails.application.routes.draw do
       get :following, :followers
     end
   end
-  resources :microposts,          only: [:create, :destroy]
+  resources :password_resets,     only: [:new, :create, :edit, :update]
   resources :relationships,       only: [:create, :destroy]
+  resources :microposts,          only: [:index, :create, :destroy]
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

@@ -1,12 +1,18 @@
 class MicropostsController < ApplicationController
   before_action :logged_in_user, only:[:create, :destroy]
-  before_action :current_user, only: :destroy
+  before_action :current_user, only: [:index]
+  before_action :correct_user, only: :destroy
+
+  def index
+    @micropost = current_user.microposts.new
+    @feed_items = current_user.microposts.paginate(page: params[:page])
+  end
 
   def create
-    @micropost = current_user.micropost.build(micropost_params)
+    @micropost = current_user.microposts.build(micropost_params)
     if @micropost.save
       flash[:success] = "Micropost created!"
-      redirect_to root_url
+      redirect_to microposts_path
     else
       @feed_items = []
       render 'static_pages/home'
@@ -16,7 +22,7 @@ class MicropostsController < ApplicationController
   def destroy
     @micropost.destroy
     flash[:success] = "Micropost deleted"
-    redirect_to request.referrer || root_url
+    redirect_to request.referrer || microposts_path
   end
 
   private
